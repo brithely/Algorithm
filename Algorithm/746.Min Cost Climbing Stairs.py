@@ -1,5 +1,11 @@
-# https://leetcode.com/problems/min-cost-climbing-stairs/
-# Dynamic Programming
+"""
+2022.11.16
+https://leetcode.com/problems/min-cost-climbing-stairs/
+Easy
+Dynamic Programming
+"""
+
+
 from typing import List
 
 
