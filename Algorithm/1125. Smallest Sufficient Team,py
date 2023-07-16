@@ -1,0 +1,34 @@
+"""
+2023.07.16
+https://leetcode.com/problems/smallest-sufficient-team/
+Hard
+"""
+
+
+class Solution:
+    def smallestSufficientTeam(self, req_skills: List[str], people: List[List[str]]) -> List[int]:
+        bitmask_skills = dict()
+        total_skill = 2 ** len(req_skills) - 1
+        for i, skill in enumerate(req_skills):
+            bitmask_skills[skill] = 1 << i
+        people_skills = defaultdict(int)
+        for i, p in enumerate(people):
+            for j in p:
+                people_skills[i] += bitmask_skills[j]
+        done_team_list = []
+        team_list = []
+        def make_team(total_skill, team_skill, step, people_skills, team_list, done_team_list):
+            if len(done_team_list) > 0 and len(team_list) >= len(done_team_list) - 1 or step == len(people_skills):
+                return
+            team_list.append(step)
+            if total_skill == (team_skill | people_skills[step]):
+                if len(done_team_list) == 0 or len(team_list) < len(done_team_list):
+                    done_team_list[:] = team_list[:]
+                team_list.pop()
+                return 
+            elif (team_skill | people_skills[step]) > team_skill:
+                make_team(total_skill, team_skill | people_skills[step], step+1, people_skills, team_list, done_team_list)
+            team_list.pop()
+            make_team(total_skill, team_skill, step+1, people_skills, team_list, done_team_list)
+        make_team(total_skill, 0, 0, people_skills, team_list, done_team_list)
+        return done_team_list
